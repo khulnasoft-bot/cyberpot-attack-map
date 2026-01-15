@@ -12,7 +12,7 @@ es_url = os.getenv('MAP_ES_URL', 'http://127.0.0.1:9200')
 es = Elasticsearch(es_url)
 redis_ip = os.getenv('MAP_REDIS_HOST', '127.0.0.1')
 redis_channel = 'attack-map-production'
-version = 'Data Server 2.5.0'
+version = 'Data Server 3.0.0'
 local_tz = get_localzone()
 output_text = os.getenv("CYBERPOT_ATTACKMAP_TEXT", "ENABLED").upper()
 
