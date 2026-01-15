@@ -207,11 +207,11 @@ def update_honeypot_data():
     processed_data = []
     last = {"1m", "1h", "24h"}
     mydelta = 10
-    # Using timezone-aware UTC datetime (Python 3.14+ requirement)
-    time_last_request = datetime.datetime.now(datetime.UTC) - datetime.timedelta(seconds=mydelta)
-    last_stats_time = datetime.datetime.now(datetime.UTC) - datetime.timedelta(seconds=10)
+    # Using timezone-aware UTC datetime
+    time_last_request = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=mydelta)
+    last_stats_time = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=10)
     while True:
-        now = datetime.datetime.now(datetime.UTC)
+        now = datetime.datetime.now(datetime.timezone.utc)
         # Get the honeypot stats every 10s (last 1m, 1h, 24h)
         if (now - last_stats_time).total_seconds() >= 10:
             last_stats_time = now
@@ -229,7 +229,7 @@ def update_honeypot_data():
         # Get the last 100 new honeypot events every 0.5s
         # Convert timezone-aware datetime to naive for consistent string formatting with ES
         mylast_dt = time_last_request.replace(tzinfo=None)
-        mynow_dt = (datetime.datetime.now(datetime.UTC) - datetime.timedelta(seconds=mydelta)).replace(tzinfo=None)
+        mynow_dt = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=mydelta)).replace(tzinfo=None)
         
         mylast = str(mylast_dt).split(" ")
         mynow = str(mynow_dt).split(" ")
@@ -264,7 +264,7 @@ def update_honeypot_data():
         res = es.search(index="logstash-*", size=100, query=ES_query)
         hits = res['hits']
         if len(hits['hits']) != 0:
-            time_last_request = datetime.datetime.now(datetime.UTC) - datetime.timedelta(seconds=mydelta)
+            time_last_request = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=mydelta)
             for hit in hits['hits']:
                 try:
                     process_datas = process_data(hit)
