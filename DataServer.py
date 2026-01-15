@@ -7,11 +7,10 @@ import redis
 from elasticsearch import Elasticsearch
 from tzlocal import get_localzone
 
-# Within CyberPot: es = Elasticsearch('http://elasticsearch:9200') and redis_ip = 'map_redis'
-#es = Elasticsearch('http://127.0.0.1:64298')
-#redis_ip = '127.0.0.1'
-es = Elasticsearch('http://elasticsearch:9200')
-redis_ip = 'map_redis'
+# Configuration
+es_url = os.getenv('MAP_ES_URL', 'http://127.0.0.1:9200')
+es = Elasticsearch(es_url)
+redis_ip = os.getenv('MAP_REDIS_HOST', '127.0.0.1')
 redis_channel = 'attack-map-production'
 version = 'Data Server 2.5.0'
 local_tz = get_localzone()
